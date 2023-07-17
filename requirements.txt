@@ -1,0 +1,16 @@
+pip==23.1.2
+beautifulsoup4==4.12.2
+click==8.0.4
+colorama==0.4.6
+Flask==2.2.2
+gunicorn==20.1.0
+itsdangerous==2.0.1
+janome==0.4.2
+jinja2==3.1.2
+MarkupSafe==2.1.1
+numpy==1.24.3
+pandas==1.5.3
+pytorch-lightning==2.0.3
+scikit-learn==1.2.2
+Werkzeug==2.2.3
+wtforms==2.3.3

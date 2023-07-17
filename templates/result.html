@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+    <title>NP App</title>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js" integrity="sha512-tOcHADT+YGCQqH7YO99uJdko6L8Qk5oudLN6sCeI4BQnpENq6riR6x9Im+SGzhXpgooKBRkPsget4EOoH5jNCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <title>Chart.js example</title>   
+        <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@next/dist/chartjs-adapter-date-fns.bundle.min.js"></script> -->
+        <style>
+            .chart-container {
+                position: relative;
+                width: 300px;
+                height: 300px;
+                margin: 0 auto;
+            }
+        
+            #mychart-pie {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            .table-container {
+                width: 100%;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div style="text-align:center;">
+            <div style="display:inline-block;">
+                {% if Res_NP %}
+                    <h1>総合判定： {{ Res_NP }} </h1>
+                    <h3>ポジティブ: {{ Res_P }}, ネガティブ: {{ Res_N }}, 中立: {{ Res_Neu }}</h3>
+                    <!-- <a href="./">トップへ戻る</a> -->
+
+                    <!-- ポジティブネガティブの値を設定 -->
+                    <script>
+                        var dataset = {
+                            Res_NP: "{{ Res_NP }}",
+                            Res_P: parseInt("{{ Res_P }}", 10),
+                            Res_N: parseInt("{{ Res_N }}", 10),
+                            Res_Neu: parseInt("{{ Res_Neu }}", 10)
+                        };
+                    </script>
+                    
+                    <div class="chart-container">
+                        <canvas id="mychart-pie"></canvas>
+                    </div>
+                    
+                    <!-- 円グラフを作る -->                    
+                    <script>
+                        var ctx = document.getElementById('mychart-pie');
+                        var myChart = new Chart(ctx, {
+                            type: 'pie',
+                            options: {
+                                plugins: {
+                                    legend: {
+                                        position: 'top'
+                                    }
+                                }
+                            },
+                            data: {
+                                labels: ['Positive', 'Negative', 'Neutral'],
+                                datasets: [{
+                                    data: [dataset.Res_P, dataset.Res_N, dataset.Res_Neu],
+                                    backgroundColor: ['#ffb6c1', '#87cefa', '#dcdcdc'],
+                                    weight: 100,
+                                }],
+                            },
+                        });
+                    </script>
+                    <a href="./">トップへ戻る</a>
+                    
+                    <h1>レビュー内容</h1>    
+                    <div class="table-container">
+                        {{table | safe}}
+                    </div>
+
+                {% else %}
+                    <a href="./">トップへ戻る</a>
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>
