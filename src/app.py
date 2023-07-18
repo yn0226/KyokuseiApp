@@ -155,9 +155,13 @@ class SentimentAnalysis:
 #------------------
 # インスタンスの生成
 #------------------
-sa = SentimentAnalysis('./kyokuseiDic/pn.csv.m3.120408.trim')
+# ★ローカルは以下のパス
+# sa = SentimentAnalysis('./kyokuseiDic/pn.csv.m3.120408.trim')
+# ★デプロイ時は以下のパス
+print('[Dic1]パス前')
+sa = SentimentAnalysis('../kyokuseiDic/pn.csv.m3.120408.trim')
+print('[Dic1]パス後')
 
-    
 # Flask のインスタンスを作成
 app = Flask(__name__)   
 
