@@ -349,6 +349,7 @@ def scrape_kakaku(url):
                 nextBtn2 = nextBtn.find('a')
                 print('Btn2:',nextBtn2)
                 if nextBtn2 == None:
+                    print('[ScrEnd]')
                     break           
 
 
@@ -357,6 +358,7 @@ def scrape_kakaku(url):
     
     #スクレイプ結果をDFに出力(app.pyから使用)
     df_return = scr.display_df()
+    print('[DF_Scr]',len(df_return))
     return df_return
 
  

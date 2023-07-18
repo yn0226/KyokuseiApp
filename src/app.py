@@ -200,6 +200,7 @@ def predicts():
 
             # URLからスクレイピング(kakakuCom.pyから関数の呼び出し)         
             res_URL = scrape_kakaku(input_URL)
+            print('[ScrEnd2]')
 
             # データフレームの表示(kakakuCom.py から読み込み)
             res_df = res_URL            
