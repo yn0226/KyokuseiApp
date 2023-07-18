@@ -215,7 +215,7 @@ def predicts():
             reviews = []
             for review in df_Input['comment']:    
                 reviews.append(review)
-                #print('全レビュー数：', len(reviews))
+            print('全レビュー数：', len(reviews))
 
             # reviewsからレビューを順に取り出し、linesに格納
             # →linesから一文ずつ取り出し、感情分析
