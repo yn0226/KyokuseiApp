@@ -337,6 +337,16 @@ def scrape_kakaku(url):
         #ページ内のレビュー数が15未満なら、最後のページと判断してループを抜ける
         if len(reviews) < 15:
             break
+        
+        #次のページのアイコンを確認
+        nextBtn = scr.get_text(review.find('div',class_='alignC mTop15'))
+        if nextBtn == None:
+            break
+        #else:
+            #次ページあり
+        #    print('[次へボタン]', nextBtn)
+
+
     #スクレイプ結果をCSVに出力
     #scr.to_csv("C:/01_Amazon/価格com口コミ.csv")
     
