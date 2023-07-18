@@ -339,12 +339,12 @@ def scrape_kakaku(url):
             break
         
         #次のページのアイコンを確認
-        nextBtn = scr.get_text(review.find('div',class_='alignC mTop15'))
+        nextBtn = scr.get_text(review.find('a',class_='arrowNext01'))
         if nextBtn == None:
             break
-        #else:
-            #次ページあり
-        #    print('[次へボタン]', nextBtn)
+        else:
+            #次ページあり            
+            print('[次へボタン]', nextBtn)
 
 
     #スクレイプ結果をCSVに出力
