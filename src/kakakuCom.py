@@ -218,6 +218,8 @@ class Scrape():
         '''
  
         return ' ' if soup == None else soup.text
+        #return 'noNext' if soup == None else soup.text
+    
     
     def rename_column(self,columns):
         '''
@@ -339,12 +341,15 @@ def scrape_kakaku(url):
             break
         
         #次のページのアイコンを確認
-        nextBtn = scr.get_text(review.find('a',class_='arrowNext01'))
+        nextBtn = scr.get_text(review.find('p',class_='alignC mTop15'))
+        nextBtn2 = scr.get_text(review.find('a',class_='arrowNext01'))
+        print('[Btn1]',nextBtn,'[Btn2]',nextBtn2)
         if nextBtn == None:
-            break
+            if nextBtn2 == None:
+                break
         else:
             #次ページあり            
-            print('[次へボタン]', nextBtn)
+            print('[次へボタン]', nextBtn2)
 
 
     #スクレイプ結果をCSVに出力
