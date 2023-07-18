@@ -339,17 +339,17 @@ def scrape_kakaku(url):
         #ページ内のレビュー数が15未満なら、最後のページと判断してループを抜ける
         if len(reviews) < 15:
             break
-        
-        #次のページのアイコンを確認
-        nextBtn = scr.get_text(review.find('p',class_='alignC mTop15'))
-        nextBtn2 = scr.get_text(review.find('a',class_='arrowNext01'))
-        print('[Btn1]',nextBtn,'[Btn2]',nextBtn2)
-        if nextBtn == None:
-            if nextBtn2 == None:
+        elif len(reviews) == 15:
+            #次のページのアイコンを確認
+            nextBtn = soup.find('p',class_='alignC mTop15')
+            print('Btn1:',nextBtn)
+            if nextBtn == None:
                 break
-        else:
-            #次ページあり            
-            print('[次へボタン]', nextBtn2)
+            else:            
+                nextBtn2 = nextBtn.find('a')
+                print('Btn2:',nextBtn2)
+                if nextBtn2 == None:
+                    break           
 
 
     #スクレイプ結果をCSVに出力
