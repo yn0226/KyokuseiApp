@@ -81,7 +81,7 @@ class SentimentAnalysis:
 
         Returns:
         --------
-            (int,int,int,int) 　ポジティブ数、ネガティブ数、ニュートラル数、判定不可数
+            (int,int,int,int) ポジティブ数、ネガティブ数、ニュートラル数、判定不可数
         '''
         posi = 0
         nega = 0
@@ -246,7 +246,9 @@ def predicts():
                     #print(line)         # 元の文書を表示
                     sa.read_text(line)  # 文書の読み込み
                     #res = sa.analyze()  # 感情分析の実行★★
+                    print('[感情分析]実行前')
                     posi, nega, neut, err = sa.analyze()  # 感情分析の実行★★
+                    print('[感情分析]実行後')
 
                     #結果をカウントアップ
                     cnt_P = cnt_P + posi
@@ -289,7 +291,10 @@ def predicts():
                 result.loc[i] = [res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err]  # 値を追加
                 i = i+1
                 #print('No.:',i,'判定結果：',res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
-                
+
+            #Err用
+            print('[resultサイズ]',len(result))
+
             # 新しくDFを作成し、元のCSVデータに判定結果を追加
             #df_CSVRes = pd.concat([df_Input, result], axis=1)
 
