@@ -242,19 +242,19 @@ def predicts():
                 cnt_N = 0
                 cnt_Neu = 0
                 cnt_Err = 0
+                i = 0
                 for line in lines:
                     #print(line)         # 元の文書を表示
                     sa.read_text(line)  # 文書の読み込み
-                    #res = sa.analyze()  # 感情分析の実行★★
-                    print('[感情分析]実行前')
+                    #res = sa.analyze()  # 感情分析の実行★★                    
                     posi, nega, neut, err = sa.analyze()  # 感情分析の実行★★
-                    print('[感情分析]実行後')
-
+                    
                     #結果をカウントアップ
                     cnt_P = cnt_P + posi
                     cnt_N = cnt_N + nega
                     cnt_Neu = cnt_Neu + neut
-                    cnt_Err = cnt_Err + err
+                    cnt_Err = cnt_Err + err                    
+                print('[感情分析]実行後、行数:',len(lines))
 
                 # 1レビューの判定結果の合算から、P/N/中立を決定
                 res_PN =''
@@ -290,7 +290,7 @@ def predicts():
                 # 値を1行ずつ追加
                 result.loc[i] = [res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err]  # 値を追加
                 i = i+1
-                #print('No.:',i,'判定結果：',res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
+                print('No.:',i,'判定結果：',res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
 
             #Err用
             print('[resultサイズ]',len(result))
