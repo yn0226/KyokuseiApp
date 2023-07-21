@@ -217,71 +217,85 @@ def predicts():
             #------------------
             df_Input = res_df
 
+            # CSVからレビュー部分を順に取り出し、reviewsに格納
+            reviews = []
+            for review in df_Input['comment']:    
+                reviews.append(review)
+            print('全レビュー数：', len(reviews))
+
             # reviewsからレビューを順に取り出し、linesに格納
             # →linesから一文ずつ取り出し、感情分析
             lines = []
             result = pd.DataFrame(columns=['結果', 'P', 'N', '中立', 'エラー'])
             i = 0   #結果格納用DFのカウンタ
 
-            # 変数を初期化
             all_P = 0
             all_N = 0
             all_Neu = 0
             all_Ex = 0
 
-            # データフレームdf_Inputの'comment'列の内容を直接処理
-            for review in df_Input['comment']:
+            for review in reviews:    
+
+                #読み込んだレビューを一文ずつ区切る
                 lines = review.split("。")
                 for line in lines:
                     if line.strip() != "":
-                        line.strip()  # 各文の前後の余分なスペースを削除
-
+                        line.strip()        #各文の前後の余分なスペースを削除
+                        #print('区切った文章の数：',len(line))
+                
+                #1行ずつ読んで分析する
                 cnt_P = 0
                 cnt_N = 0
                 cnt_Neu = 0
                 cnt_Err = 0
-
+                
                 for line in lines:
-                    sa.read_text(line)
-                    posi, nega, neut, err = sa.analyze()
-
-                    # 結果をカウントアップ
-                    cnt_P += posi
-                    cnt_N += nega
-                    cnt_Neu += neut
-                    cnt_Err += err
+                    #print(line)         # 元の文書を表示
+                    sa.read_text(line)  # 文書の読み込み
+                    #res = sa.analyze()  # 感情分析の実行★★                    
+                    posi, nega, neut, err = sa.analyze()  # 感情分析の実行★★
+                    
+                    #結果をカウントアップ
+                    cnt_P = cnt_P + posi
+                    cnt_N = cnt_N + nega
+                    cnt_Neu = cnt_Neu + neut
+                    cnt_Err = cnt_Err + err
 
                 # 1レビューの判定結果の合算から、P/N/中立を決定
-                res_PN = ''
-                if cnt_P > cnt_N:
+                res_PN =''
+                if cnt_P > cnt_N:    
                     res_PN = 'P'
                 elif cnt_P < cnt_N:
                     res_PN = 'N'
-                else:
-                    if cnt_P == 0 and cnt_N == 0 and cnt_Neu == 0:
+                elif cnt_P == cnt_N:
+                    if cnt_P == 0 and cnt_N == 0 and cnt_Neu ==0:
                         res_PN = 'Err'
                     else:
                         if cnt_P == cnt_N:
                             res_PN = 'Neu'
                         elif cnt_P > cnt_Neu:
-                            res_PN = 'P'
-                        else:
+                            res_PN = 'P'                
+                        elif cnt_P < cnt_Neu:
                             res_PN = 'Neu'
+                        elif cnt_P == cnt_Neu:
+                            res_PN = 'Neu'
+
 
                 # 結果を総計用カウンタに格納
                 if res_PN == 'P':
-                    all_P += 1
+                    all_P = all_P + 1
                 elif res_PN == 'N':
-                    all_N += 1
+                    all_N = all_N + 1
                 elif res_PN == 'Err':
-                    all_Ex += 1
+                    all_Ex = all_Ex + 1
                 else:
-                    all_Neu += 1
+                    all_Neu = all_Neu + 1   
+                
 
                 # 値を1行ずつ追加
                 result.loc[i] = [res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err]  # 値を追加
-                i += 1
-                print('No.:', i, '判定結果：', res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
+                i = i+1
+                print('No.:',i,'判定結果：',res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
 
                 # 現在のプロセスのメモリ使用量を取得
                 process = psutil.Process()
@@ -291,9 +305,8 @@ def predicts():
                 memory_usage_MB = memory_info.rss / 1024 / 1024
                 print(f"[メモリ使用量] {memory_usage_MB:.2f} MB")
 
-                # 不要な変数やデータフレームを削除
-                del lines, cnt_P, cnt_N, cnt_Neu, cnt_Err
-
+            #Err用
+            print('[resultサイズ]',len(result))
 
             # 新しくDFを作成し、元のCSVデータに判定結果を追加
             #df_CSVRes = pd.concat([df_Input, result], axis=1)
