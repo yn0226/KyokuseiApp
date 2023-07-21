@@ -47,6 +47,12 @@ import io
 import base64
 from wtforms import Form, StringField, validators, SubmitField
 
+#-------------------
+# メモリ使用量
+#-------------------
+import psutil
+
+
 # # #------------------
 # # # スクレイピング
 # # #------------------
@@ -157,9 +163,9 @@ class SentimentAnalysis:
 #------------------
 # ★ローカルは以下のパス
 print('[Dic1]パス前')
-#sa = SentimentAnalysis('./src/kyokuseiDic/pn.csv.m3.120408.trim')
+sa = SentimentAnalysis('./src/kyokuseiDic/pn.csv.m3.120408.trim')
 # ★デプロイ時は以下のパス
-sa = SentimentAnalysis('../src/kyokuseiDic/pn.csv.m3.120408.trim')
+#sa = SentimentAnalysis('../src/kyokuseiDic/pn.csv.m3.120408.trim')
 print('[Dic1]パス後')
 
 # Flask のインスタンスを作成
@@ -242,7 +248,7 @@ def predicts():
                 cnt_N = 0
                 cnt_Neu = 0
                 cnt_Err = 0
-                i = 0
+                
                 for line in lines:
                     #print(line)         # 元の文書を表示
                     sa.read_text(line)  # 文書の読み込み
@@ -253,8 +259,7 @@ def predicts():
                     cnt_P = cnt_P + posi
                     cnt_N = cnt_N + nega
                     cnt_Neu = cnt_Neu + neut
-                    cnt_Err = cnt_Err + err                    
-                print('[感情分析]実行後、行数:',len(lines))
+                    cnt_Err = cnt_Err + err
 
                 # 1レビューの判定結果の合算から、P/N/中立を決定
                 res_PN =''
@@ -291,6 +296,14 @@ def predicts():
                 result.loc[i] = [res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err]  # 値を追加
                 i = i+1
                 print('No.:',i,'判定結果：',res_PN, cnt_P, cnt_N, cnt_Neu, cnt_Err)
+
+                # 現在のプロセスのメモリ使用量を取得
+                process = psutil.Process()
+                memory_info = process.memory_info()
+
+                # バイト単位の使用メモリ量をMBに変換して表示
+                memory_usage_MB = memory_info.rss / 1024 / 1024
+                print(f"[メモリ使用量] {memory_usage_MB:.2f} MB")
 
             #Err用
             print('[resultサイズ]',len(result))
